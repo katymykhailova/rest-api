@@ -8,6 +8,7 @@ const {
   controllerWrapper,
   validation,
   authenticate,
+  upload,
 } = require('../../middlewares');
 
 router.post(
@@ -15,6 +16,7 @@ router.post(
   validation(yupUserSchema),
   controllerWrapper(ctrl.signup),
 );
+router.patch('/avatars', authenticate, upload.single('avatar'), ctrl.avatars);
 router.post('/login', validation(yupUserSchema), controllerWrapper(ctrl.login));
 router.get('/logout', authenticate, controllerWrapper(ctrl.logout));
 router.get('/current', authenticate, controllerWrapper(ctrl.current));
