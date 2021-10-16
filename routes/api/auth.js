@@ -16,6 +16,8 @@ router.post(
   validation(yupUserSchema),
   controllerWrapper(ctrl.signup),
 );
+router.post('/verify', controllerWrapper(ctrl.reSend));
+router.get('/verify/:verifyToken', controllerWrapper(ctrl.verify));
 router.patch('/avatars', authenticate, upload.single('avatar'), ctrl.avatars);
 router.post('/login', validation(yupUserSchema), controllerWrapper(ctrl.login));
 router.get('/logout', authenticate, controllerWrapper(ctrl.logout));
