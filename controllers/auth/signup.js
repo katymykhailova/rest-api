@@ -24,9 +24,9 @@ const signup = async (req, res) => {
 
   const verifyEmail = {
     to: email,
-    subject: 'Подтверждения регистрации на сайте',
+    subject: 'Verify your email to finish registration',
     html: `
-            <a href="http://localhost:3000/api/auth/verify/${verifyToken}" target="_blank">Подтвердить почту</a>
+            <a href="http://localhost:3000/api/auth/verify/${verifyToken}" target="_blank">Confirm email</a>
             `,
   };
 
