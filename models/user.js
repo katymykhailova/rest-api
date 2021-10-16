@@ -23,12 +23,20 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
+    avatarURL: {
+      type: String,
+      default: null,
+    },
   },
   { versionKey: false, timestamps: true },
 );
 
 userSchema.methods.setPassword = function (password) {
   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+};
+
+userSchema.methods.setAvatar = function (avatar) {
+  this.avatarURL = avatar;
 };
 
 userSchema.methods.comparePassword = function (password) {
