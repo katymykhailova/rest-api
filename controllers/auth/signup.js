@@ -1,8 +1,9 @@
+const { v4 } = require('uuid');
 const { Conflict } = require('http-errors');
 const gravatar = require('gravatar');
 
 const { User } = require('../../models');
-const { sendSuccessRes } = require('../../helpers');
+const { sendSuccessRes, sendEmail } = require('../../helpers');
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -12,22 +13,24 @@ const signup = async (req, res) => {
     throw new Conflict('Email in us');
   }
 
-  // const avatar = gravatar.url(
-  //   email,
-  //   {
-  //     s: '50',
-  //     d: 'robo',
-  //   },
-  //   false,
-  // );
   const avatar = gravatar.url(email, { protocol: 'https' });
-
-  const newUser = new User({ email });
+  const verifyToken = v4();
+  const newUser = new User({ email, verifyToken });
 
   newUser.setPassword(password);
   newUser.setAvatar(avatar);
 
   await newUser.save();
+
+  const verifyEmail = {
+    to: email,
+    subject: 'Verify your email to finish registration',
+    html: `
+            <a href="http://localhost:3000/api/auth/verify/${verifyToken}" target="_blank">Confirm email</a>
+            `,
+  };
+
+  await sendEmail(verifyEmail);
 
   sendSuccessRes(res, { message: 'Success register' }, 201);
 };
